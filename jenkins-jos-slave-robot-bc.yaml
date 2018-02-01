@@ -1,0 +1,34 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: jenkins-jos-slave-robot
+objects:
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: jenkins-jos-slave-robot
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
+    name: jenkins-jos-slave-robot
+  spec:
+    triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChange: {}
+    runPolicy: Serial
+    source:
+      type: Git
+      git:
+        ref: develop
+        uri: 'ssh://git@git.belastingdienst.nl:7999/ywb/sdp-jenkins-openshift.git'
+      contextDir: jenkins-slave-robot
+      sourceSecret:
+        name: jos-openshift-builder
+    strategy:
+      type: Docker
+      dockerStrategy: {}
+    output:
+      to:
+        kind: ImageStreamTag
+        name: jenkins-jos-slave-robot:latest

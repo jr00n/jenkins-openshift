@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <mirrors>
+        <mirror>
+            <id>belastingdienst.repo</id>
+            <mirrorOf>*</mirrorOf>
+            <url>http://rms.belastingdienst.nl/repo</url>
+        </mirror>
+    </mirrors>
+
+    <proxies>
+        <!-- ### configured http proxy ### -->
+    </proxies>
+
+    <profiles>
+
+        <!-- Java Ontwikkel Straat -->
+        <profile>
+            <id>jos</id>
+            <properties>
+                <IBM_JDK_80>/opt/ibm/java/bin/</IBM_JDK_80>
+            </properties>
+        </profile>
+
+        <!-- Override the repository "central" from the Maven Super POM, to set HTTPS by default -->
+        <profile>
+            <id>securecentral</id>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <url>https://repo1.maven.org/maven2</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>central</id>
+                    <url>https://repo1.maven.org/maven2</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+
+        <!-- central repositories via HTTP. Disabled by default. -->
+        <profile>
+            <id>insecurecentral</id>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <url>http://repo1.maven.org/maven2</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>central</id>
+                    <url>http://repo1.maven.org/maven2</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+
+    </profiles>
+    <activeProfiles>
+        <activeProfile>securecentral</activeProfile>
+        <activeProfile>jos</activeProfile>
+    </activeProfiles>
+</settings>

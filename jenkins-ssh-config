@@ -1,0 +1,5 @@
+Host git.belastingdienst.nl
+  User git
+  Port 7999
+  IdentityFile ~/ssh-keys/git-ssh-key
+  StrictHostKeyChecking no

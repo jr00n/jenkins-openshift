@@ -1,0 +1,51 @@
+{
+    "kind": "Role",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "shared-resource-viewer"
+    },
+    "rules": [
+        {
+            "verbs": [
+                "get",
+                "list",
+                "watch"
+            ],
+            "attributeRestrictions": null,
+            "apiGroups": [
+                ""
+            ],
+            "resources": [
+                "templates"
+            ]
+        },
+        {
+            "verbs": [
+                "get",
+                "list",
+                "watch"
+            ],
+            "attributeRestrictions": null,
+            "apiGroups": [
+                ""
+            ],
+            "resources": [
+                "imagestreamimages",
+                "imagestreams",
+                "imagestreamtags"
+            ]
+        },
+        {
+            "verbs": [
+                "get"
+            ],
+            "attributeRestrictions": null,
+            "apiGroups": [
+                ""
+            ],
+            "resources": [
+                "imagestreams/layers"
+            ]
+        }
+    ]
+}

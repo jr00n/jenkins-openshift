@@ -1,0 +1,357 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-jos
+  annotations:
+    description: |-
+      Een Belastingdienst specifieke Jenkins voor het Java Software Development Platform.
+    iconClass: icon-jenkins
+    openshift.io/display-name: Jenkins Belastingdienst (JOS)
+    tags: instant-app, jenkins
+    template.openshift.io/documentation-url: https://devtools.belastingdienst.nl/confluence/display/JOS/Jenkins+JOS+OpenShift
+    template.openshift.io/long-description: Deze template bevat een Jenkins server
+          die geschikt is gemaakt om te communiceren met de rest van het Software Development Platform
+          en ondersteuning bied aan de Delivery Pipeline van de Java Ontwikkel Straat.
+    template.openshift.io/provider-display-name: Java Ontwikkelstraat
+    template.openshift.io/support-url: https://devtools.belastingdienst.nl/confluence/display/JOS/
+labels:
+  template: jenkins-jos
+  app: jenkins-jos
+message: Jenkins van de Java Onwikkelstraat BCAO is aangemaakt in je project.
+  Zie Confluence voor de details hoe deze Jenkins te gebruiken met de rest van het Java Software Development Platform.
+objects:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: jenkins-ssh-keys
+    type: jos/jenkins-git-ssh
+  data:
+    git-ssh-key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQ0KTUlJRW9nSUJBQUtDQVFFQXQ5dGpWNkpncUh3ZUp6L1UrQ0swU3kvWkhBek5PZ0ZNMThoN3lROXZqWnRpaitQMw0KekQ1TnptQVBJWllCUkVMSmNoMndGYnVMdEltTlpYY3hJVFgrMTkwSC8vRHlEc29CZ2pZdjlvZEs2QmQ1dk4xRQ0KaDUwd0U1WXNKUm93VGZJeWJTMjZEdlM3N2RGb0cvUVp2MGJlYmRUaURXNzl0UlcwWkswbGlJaEwzRjRhYlc1QQ0KVnFJeEZTWkhyV04zMFFPOU9KaWJtQ0JQdXJCMjFVNFdpRkl1Qm1XU3dTVnRXd01Ob2cxU251YTFzcE5DSjJKVA0KNmZUZDdpRDZNMVN6Y0tieUtQcFBCa3BLZ0VIQWtpSUIrS2Yrd1JXbmxEcDFKWDlZZUx0eUNGVkswNS9DMUJhQg0KL0cvbzVCYlVNbHQ2Ukw4ZnJjL2oxaTJoQlgxQkVxNXJWWnZjUXdJREFRQUJBb0lCQUFwM2gvRk9RamgxVUhZbA0Ka1NkTE9uNXBTKy9uM3FzbHRjMDNFYTBCbnZVdDJtK2NwOWZOMkRvZWg5MytuelhXbzRkR24yYXRWYWZDaVBVMA0KMHV3MEdiMEtUVkZKMDAzNlBCbkFvZnhqK1dTN0tXZ1NKTHVmdkVQeE1iUXZDSDczZ2QxclZBTlQ5WHIxaC9ySA0KYTh2UzZnalFyTW5jL3I2WGJMeXFpczk2Q3UrUnB6VUhrMXd2Qmp2b1FsZktMUFJRc0tybTdWSTIvdzJZTE9SRA0KWU1YSisvZlBEaWlwSjNTa3lHRUwwMnl5ODdXaldOczZldVl5Ym9iSzBSZU1rQmtraFJCY1oxY20yS0E4Z2NMSw0KSENTWmUrMk5DMWkrVkVRZkxiMEN4U01BV2VpZklWb21iMzRiTlc1VmxWV3p6bzBMVG9sNW05czNrQ2NUNFgraw0KZWJNZ2RDRUNnWUVBM0Q1S1BjZ0FIQkhhVWFIdDBtZnBZeU1LSEpnVWdKSmVxZTBXdjdNVWg5V1ViMHd2MWpqSw0KUXBpMFBrZUxpQk1tT0FYQ3NrR2hadk40N0xKTXJoQXZ5SWNORkJOa0xBNnZ6RW56bWR1UVRKbjRQUVF2aSt0dA0KWlFPc3NvQnl2UHVNQndsWFZRV3liY0w5KzgzTjRxMmdaeXFQQ1NnRnByVlpMNm9SRHhrL0p6RUNnWUVBMWJUUQ0KOWI0b0RxTHRxdm96cUI4WHJWZGl0SERsRjZSdFdacmVqTUNheG9XdzllcWNoV0JldkRwQmd5K2FSbjFBaXlmRw0KbUh4QXdJU3ZWWFNSTklqNVlPQVBKVzgzR1Z4S1k4S0hpcFAxU0xDd1FnYXk4bVBrOHhubkpjZ2tvc1gxMGN4Rg0KVjFTT2NYeHI5YjEzcjlKR2VpaEN3Sy82MzNEZUhFaE1rK2pIaGJNQ2dZQmg5VDZXSGdlV2RJWlMrcC9KanJncQ0KaE9JeGQ1N2UxTHRQL3dpNE9ORnYzUm9KS3F5NExrZ2Z1TVdxVWE0STF1T1AxVmdVYXNaOEFOeVBBbnJDakthRQ0KSFRVKzhhVURSNEQvYndEdk5NNElsQTdxTEp0dE0waFR2bitvWVNNblZRYWg5cENtVzBOU09JRTQ1ditreTY3bA0KVS9PTWtnVjVjWDE2aXJ6TnAyQUVjUUtCZ0hYcGptSUl5WkZKMUZqQ05ENU82WUY2OWJzWmowMjhLNW1GR2NZUA0KZjFhSjdWbkNXUm8rVWdjSkhaeUVaMXI5UU4rRzBzelB3ZXAzUzBhYlNvTHlFS2FpK2JodDVMalpjeklYNHpGUw0KOGNOcHVkYTBXNGZpRmpFTDJiMis4SGZmUWdLLzhvSjg1UnM0eTFpTGNiNVJCeEhmcFBVc0kvK2xCdWdUL0N5Zw0KQTNhQkFvR0FNSkVFeE0zSFRuS2pocTRXZHB2QUd3LzViVEhOZHFWcSsza21VcklBWHFhMndBUHVWbVJSbU5Qaw0KenE5VEhKZmtBVlJsQjc1dGtjSVh1ZlhSTDZ5SWRKcnF3cGJpVGJUMm0rd25KWVAwWEFtN3pFQjBsNjZoU2FsLw0KNWMvOXlYMnJZeSt4M1VOaDRvd0pSL3UzZGZzemJzSzdqR1kvVVZtNURYWHByTVIyc3VNPQ0KLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0=
+    git-ssh-key.pub: c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFDMzIyTlhvbUNvZkI0blA5VDRJclJMTDlrY0RNMDZBVXpYeUh2SkQyK05tMktQNC9mTVBrM09ZQThobGdGRVFzbHlIYkFWdTR1MGlZMWxkekVoTmY3WDNRZi84UElPeWdHQ05pLzJoMHJvRjNtODNVU0huVEFUbGl3bEdqQk44akp0TGJvTzlMdnQwV2diOUJtL1J0NXQxT0lOYnYyMUZiUmtyU1dJaUV2Y1hocHRia0JXb2pFVkprZXRZM2ZSQTcwNG1KdVlJRSs2c0hiVlRoYUlVaTRHWlpMQkpXMWJBdzJpRFZLZTVyV3lrMEluWWxQcDlOM3VJUG96VkxOd3B2SW8razhHU2txQVFjQ1NJZ0g0cC83QkZhZVVPblVsZjFoNHUzSUlWVXJUbjhMVUZvSDhiK2prRnRReVczcEV2eCt0eitQV0xhRUZmVUVTcm10Vm05eEQgam9zLWplbmtpbnMtYml0YnVja2V0Cg==
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: jenkins-ssh-config
+    type: jos/jenkins-ssh-config
+  data:
+    config: SG9zdCBnaXQuYmVsYXN0aW5nZGllbnN0Lm5sCiAgVXNlciBnaXQKICBQb3J0IDc5OTkKICBJZGVudGl0eUZpbGUgfi9zc2gta2V5cy9naXQtc3NoLWtleQogIFN0cmljdEhvc3RLZXlDaGVja2luZyBubwo=
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    labels:
+      role: jenkins-slave
+    name: jenkins-slave-podtemplates
+  data:
+    jos-m3-ibmjdk8: |
+      <org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
+        <name>jos-m3-ibmjdk8</name>
+        <instanceCap>2147483647</instanceCap>
+        <idleMinutes>0</idleMinutes>
+        <label>jos-m3-ibmjdk8</label>
+        <serviceAccount>jenkins</serviceAccount>
+        <volumes>
+          <org.csanchez.jenkins.plugins.kubernetes.volumes.PersistentVolumeClaim>
+            <mountPath>/home/jenkins/.m2/repository</mountPath>
+            <claimName>m2repo</claimName>
+            <readOnly>false</readOnly>
+          </org.csanchez.jenkins.plugins.kubernetes.volumes.PersistentVolumeClaim>
+          <org.csanchez.jenkins.plugins.kubernetes.volumes.SecretVolume>
+            <mountPath>/home/jenkins/.ssh</mountPath>
+            <secretName>jenkins-ssh-config</secretName>
+          </org.csanchez.jenkins.plugins.kubernetes.volumes.SecretVolume>
+          <org.csanchez.jenkins.plugins.kubernetes.volumes.SecretVolume>
+            <mountPath>/home/jenkins/ssh-keys</mountPath>
+            <secretName>jenkins-ssh-keys</secretName>
+          </org.csanchez.jenkins.plugins.kubernetes.volumes.SecretVolume>
+        </volumes>
+        <containers>
+          <org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
+            <name>jnlp</name>
+            <image>docker-registry.default.svc:5000/belastingdienst/jenkins-jos-slave-m3-ibmjdk8:stable</image>
+            <privileged>false</privileged>
+            <alwaysPullImage>false</alwaysPullImage>
+            <workingDir>/tmp</workingDir>
+            <command></command>
+            <args>${computer.jnlpmac} ${computer.name}</args>
+            <ttyEnabled>false</ttyEnabled>
+            <envVars/>
+          </org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
+        </containers>
+        <envVars>
+          <org.csanchez.jenkins.plugins.kubernetes.PodEnvVar>
+            <key>http_proxy</key>
+            <value></value>
+          </org.csanchez.jenkins.plugins.kubernetes.PodEnvVar>
+        </envVars>
+        <annotations/>
+        <imagePullSecrets/>
+      </org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
+    jos-m3-openjdk8: |
+      <org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
+        <name>jos-m3-openjdk8</name>
+        <instanceCap>2147483647</instanceCap>
+        <idleMinutes>0</idleMinutes>
+        <label>jos-m3-openjdk8</label>
+        <serviceAccount>jenkins</serviceAccount>
+        <volumes>
+          <org.csanchez.jenkins.plugins.kubernetes.volumes.PersistentVolumeClaim>
+            <mountPath>/home/jenkins/.m2/repository</mountPath>
+            <claimName>m2repo</claimName>
+            <readOnly>false</readOnly>
+          </org.csanchez.jenkins.plugins.kubernetes.volumes.PersistentVolumeClaim>
+          <org.csanchez.jenkins.plugins.kubernetes.volumes.SecretVolume>
+            <mountPath>/home/jenkins/.ssh</mountPath>
+            <secretName>jenkins-ssh-config</secretName>
+          </org.csanchez.jenkins.plugins.kubernetes.volumes.SecretVolume>
+          <org.csanchez.jenkins.plugins.kubernetes.volumes.SecretVolume>
+            <mountPath>/home/jenkins/ssh-keys</mountPath>
+            <secretName>jenkins-ssh-keys</secretName>
+          </org.csanchez.jenkins.plugins.kubernetes.volumes.SecretVolume>
+        </volumes>
+        <containers>
+          <org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
+            <name>jnlp</name>
+            <image>docker-registry.default.svc:5000/belastingdienst/jenkins-jos-slave-m3-openjdk:stable</image>
+            <privileged>false</privileged>
+            <alwaysPullImage>false</alwaysPullImage>
+            <workingDir>/tmp</workingDir>
+            <command></command>
+            <args>${computer.jnlpmac} ${computer.name}</args>
+            <ttyEnabled>false</ttyEnabled>
+            <envVars/>
+          </org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
+        </containers>
+        <envVars>
+          <org.csanchez.jenkins.plugins.kubernetes.PodEnvVar>
+            <key>http_proxy</key>
+            <value></value>
+          </org.csanchez.jenkins.plugins.kubernetes.PodEnvVar>
+        </envVars>
+        <annotations/>
+        <imagePullSecrets/>
+      </org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
+    jos-robotframework: |
+      <org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
+        <name>jos-robotframework</name>
+        <instanceCap>2147483647</instanceCap>
+        <idleMinutes>0</idleMinutes>
+        <label>jos-robotframeworkg</label>
+        <serviceAccount>jenkins</serviceAccount>
+        <volumes>
+          <org.csanchez.jenkins.plugins.kubernetes.volumes.SecretVolume>
+            <mountPath>/home/jenkins/.ssh</mountPath>
+            <secretName>jenkins-ssh-config</secretName>
+          </org.csanchez.jenkins.plugins.kubernetes.volumes.SecretVolume>
+          <org.csanchez.jenkins.plugins.kubernetes.volumes.SecretVolume>
+            <mountPath>/home/jenkins/ssh-keys</mountPath>
+            <secretName>jenkins-ssh-keys</secretName>
+          </org.csanchez.jenkins.plugins.kubernetes.volumes.SecretVolume>
+        </volumes>
+        <containers>
+          <org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
+            <name>jnlp</name>
+            <image>docker-registry.default.svc:5000/belastingdienst/jenkins-jos-slave-robot:stable</image>
+            <privileged>false</privileged>
+            <alwaysPullImage>false</alwaysPullImage>
+            <workingDir>/tmp</workingDir>
+            <command></command>
+            <args>${computer.jnlpmac} ${computer.name}</args>
+            <ttyEnabled>false</ttyEnabled>
+            <envVars/>
+          </org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
+        </containers>
+        <envVars>
+          <org.csanchez.jenkins.plugins.kubernetes.PodEnvVar>
+            <key>http_proxy</key>
+            <value></value>
+          </org.csanchez.jenkins.plugins.kubernetes.PodEnvVar>
+        </envVars>
+        <annotations/>
+        <imagePullSecrets/>
+      </org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: jenkins
+  spec:
+    replicas: 1
+    selector:
+      name: jenkins
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: jenkins
+      spec:
+        containers:
+        - capabilities: {}
+          env:
+          - name: OPENSHIFT_ENABLE_OAUTH
+            value: "true"
+          - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
+            value: "true"
+          - name: OPENSHIFT_JENKINS_JVM_ARCH
+            value: i386
+          - name: KUBERNETES_MASTER
+            value: https://kubernetes.default:443
+          - name: KUBERNETES_TRUST_CERTIFICATES
+            value: "true"
+          - name: JNLP_SERVICE_NAME
+            value: jenkins-jnlp
+          - name: HTTPS_PROXY
+            value: ""
+          - name: JAVA_OPTS
+            value: -Dhudson.model.DirectoryBrowserSupport.CSP=""
+          image: ' '
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /login
+              port: 8080
+            initialDelaySeconds: 420
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: 8080
+            initialDelaySeconds: 3
+            timeoutSeconds: 3
+          resources:
+            limits:
+            memory: 512Mi
+          name: jenkins-jos
+          ports:
+          - containerPort: 50000
+            protocol: TCP
+          - containerPort: 8080
+            protocol: TCP
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - name: jenkins-data
+            mountPath: /var/lib/jenkins
+          - name: ssh-keys
+            mountPath: /var/lib/jenkins/ssh-keys
+          - name: ssh-config
+            mountPath: /var/lib/jenkins/.ssh
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext:
+          capabilities: {}
+          privileged: false
+        serviceAccountName: jenkins
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: jenkins-data
+          persistentVolumeClaim:
+            claimName: jenkins
+        - name: ssh-keys
+          secret:
+            secretName: jenkins-ssh-keys
+        - name: ssh-config
+          secret:
+            secretName: jenkins-ssh-config
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - jenkins-jos
+        from:
+          kind: ImageStreamTag
+          name: jenkins-jos:v2-stable
+          namespace: belastingdienst
+        lastTriggeredImage: ""
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      service.alpha.openshift.io/dependencies: '[{"name":"jenkins-jnlp","namespace":"","kind":"Service"}]'
+      service.openshift.io/infrastructure: "true"
+    creationTimestamp: null
+    name: jenkins
+  spec:
+    ports:
+    - name: web
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      name: jenkins
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: jenkins-jnlp
+  spec:
+    ports:
+    - name: agent
+      nodePort: 0
+      port: 50000
+      protocol: TCP
+      targetPort: 50000
+    selector:
+      name: jenkins
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: jenkins
+  spec:
+    port:
+      targetPort: web
+    to:
+      kind: Service
+      name: jenkins
+      weight: 100
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    annotations:
+      serviceaccounts.openshift.io/oauth-redirectreference.jenkins: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"jenkins"}}'
+    name: jenkins
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    name: jenkins_edit
+  roleRef:
+    name: edit
+  subjects:
+  - kind: ServiceAccount
+    name: jenkins
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: jenkins
+  spec:
+    accessModes:
+    - ReadWriteMany
+    resources:
+      requests:
+        storage: 5Gi
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: m2repo
+  spec:
+    accessModes:
+    - ReadWriteMany
+    resources:
+      requests:
+        storage: 5Gi
+  status: {}

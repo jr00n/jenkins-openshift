@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <pluginGroups></pluginGroups>
+    <proxies></proxies>
+    <servers>
+        <server>
+            <id>intern.site</id>
+            <username>user.bcao</username>
+            <password>bcao.user</password>
+        </server>
+        <server>
+            <id>intern.snapshot</id>
+            <username>user.bcao</username>
+            <password>bcao.user</password>
+        </server>
+    </servers>
+    <mirrors>
+        <mirror>
+            <id>belastingdienst.repo</id>
+            <mirrorOf>*</mirrorOf>
+            <url>http://rms.belastingdienst.nl/repo</url>
+        </mirror>
+    </mirrors>
+
+    <profiles>
+        <profile>
+            <id>jos</id>
+            <properties>
+                <!-- SONAR JDBC SETTINGS -->
+                <sonar.jdbc.url>jdbc:mysql://qmp.belastingdienst.nl:3306/sonar?useUnicode=true&amp;characterEncoding=utf8</sonar.jdbc.url>
+                <sonar.jdbc.driverClassName>com.mysql.jdbc.Driver</sonar.jdbc.driverClassName>
+                <sonar.jdbc.username>sonar</sonar.jdbc.username>
+                <sonar.jdbc.password>sonar</sonar.jdbc.password>
+                <!-- SONAR SERVER ON A REMOTE HOST -->
+                <sonar.host.url>http://qmp.belastingdienst.nl/qmp/</sonar.host.url>
+                <!-- Available JDK's -->
+                <IBM_JDK_60>/usr/lib/jvm/java</IBM_JDK_60>
+                <IBM_JDK_70>/usr/lib/jvm/java</IBM_JDK_70>
+                <IBM_JDK_80>/usr/lib/jvm/java</IBM_JDK_80>
+                <ORACLE_JDK_70>/usr/lib/jvm/java</ORACLE_JDK_70>
+                <ORACLE_JDK_80>/usr/lib/jvm/java</ORACLE_JDK_80>
+            </properties>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>jos</activeProfile>
+    </activeProfiles>
+
+</settings>

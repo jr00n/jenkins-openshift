@@ -1,0 +1,35 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: jenkins-jos-slave-m3-ibmjdk8
+objects:
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: jenkins-jos-slave-m3-ibmjdk8
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
+    name: jenkins-jos-slave-m3-ibmjdk8
+  spec:
+    triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChange: {}
+    runPolicy: Serial
+    source:
+      type: Git
+      git:
+        ref: develop
+        uri: 'ssh://git@git.belastingdienst.nl:7999/ywb/sdp-jenkins-openshift.git'
+      sourceSecret:
+        name: jos-openshift-builder
+      contextDir: jenkins-slave-maven3-ibmjdk8
+    strategy:
+      type: Docker
+      dockerStrategy: {}
+    output:
+      to:
+        kind: ImageStreamTag
+        name: jenkins-jos-slave-m3-ibmjdk8:latest

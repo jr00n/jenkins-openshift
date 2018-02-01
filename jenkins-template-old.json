@@ -1,0 +1,272 @@
+  {
+    "kind": "Template",
+    "apiVersion": "v1",
+    "metadata": {
+      "name": "jenkins-jos",
+      "annotations": {
+        "openshift.io/display-name": "Jenkins Java Ontwikkelstraat",
+        "description": "Jenkins met persistent storage.",
+        "iconClass": "icon-jenkins"
+      }
+    },
+    "objects": [
+      {
+        "kind": "DeploymentConfig",
+        "apiVersion": "v1",
+        "metadata": {
+          "name": "jenkins",
+          "creationTimestamp": null
+        },
+        "spec": {
+          "strategy": {
+            "type": "Rolling",
+            "rollingParams": {
+              "updatePeriodSeconds": 1,
+              "intervalSeconds": 1,
+              "timeoutSeconds": 600,
+              "maxUnavailable": "25%",
+              "maxSurge": "25%"
+            },
+            "resources": {}
+          },
+          "triggers": [
+            {
+              "type": "ConfigChange"
+            },
+            {
+              "type": "ImageChange",
+              "imageChangeParams": {
+                "automatic": true,
+                "containerNames": [
+                  "jenkins-jos"
+                ],
+                "from": {
+                  "kind": "ImageStreamTag",
+                  "name": "${IMAGE_TAG}",
+                  "namespace":"${IMAGE_NAMESPACE}"
+                },
+                "lastTriggeredImage": ""
+              }
+            }
+          ],
+          "replicas": 1,
+          "selector": {
+            "name": "jenkins"
+          },
+          "template": {
+            "metadata": {
+              "creationTimestamp": null,
+              "labels": {
+                "name": "jenkins"
+              }
+            },
+            "spec": {
+              "serviceAccountName": "jenkins",
+              "volumes": [
+                {
+                  "name": "jenkins-data",
+                  "persistentVolumeClaim": {
+                    "claimName": "jenkins"
+                  }
+                },
+                {
+                  "name": "jenkins-plugins",
+                  "emptyDir": {}
+                }
+              ],
+              "containers": [
+                {
+                  "name": "jenkins-jos",
+                  "image": " ",
+                  "ports": [
+                    {
+                      "containerPort": 50000,
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 8080,
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "env": [
+                    {
+                        "name": "OPENSHIFT_ENABLE_OAUTH",
+                        "value": "false"
+                    },
+                    {
+                        "name": "OPENSHIFT_ENABLE_REDIRECT_PROMPT",
+                        "value": "true"
+                    },
+                    {
+                        "name": "KUBERNETES_MASTER",
+                        "value": "https://kubernetes.default:443"
+                    },
+                    {
+                        "name": "KUBERNETES_TRUST_CERTIFICATES",
+                        "value": "true"
+                    },
+                    {
+                      "name": "JNLP_SERVICE_NAME",
+                      "value": "jenkins-jnlp"
+                    },
+                    {
+                      "name": "JAVA_OPTS",
+                      "value": "-Dhudson.slaves.NodeProvisioner.recurrencePeriod=500,-Dhudson.slaves.NodeProvisioner.initialDelay=100,-Dhudson.slaves.NodeProvisioner.MARGIN=100"
+                    },
+                    {
+                      "name": "HTTPS_PROXY",
+                      "value": ""
+                    }
+                  ],
+                  "resources": {},
+                  "volumeMounts": [
+                    {
+                      "name": "jenkins-data",
+                      "mountPath": "/var/lib/jenkins"
+                    },
+                    {
+                      "name": "jenkins-plugins",
+                      "mountPath": "/var/lib/jenkins/plugins"
+                    }
+                  ],
+                  "terminationMessagePath": "/dev/termination-log",
+                  "imagePullPolicy": "Always"
+                }
+              ],
+              "restartPolicy": "Always",
+              "terminationGracePeriodSeconds": 30,
+              "dnsPolicy": "ClusterFirst",
+              "securityContext": {
+                "capabilities": {},
+                "privileged": false
+              }
+            }
+          }
+        },
+        "status": {}
+      },
+      {
+        "kind": "Service",
+        "apiVersion": "v1",
+        "metadata": {
+          "name": "jenkins",
+          "annotations": {
+            "service.alpha.openshift.io/dependencies": "[{\"name\":\"jenkins-jnlp\",\"namespace\":\"\",\"kind\":\"Service\"}]",
+            "service.openshift.io/infrastructure": "true"
+          },
+          "creationTimestamp": null
+        },
+        "spec": {
+          "ports": [
+            {
+              "name": "web",
+              "protocol": "TCP",
+              "port": 80,
+              "targetPort": 8080
+            }
+          ],
+          "selector": {
+            "name": "jenkins"
+          },
+          "type": "ClusterIP",
+          "sessionAffinity": "None"
+        }
+      },
+      {
+        "kind": "Service",
+        "apiVersion": "v1",
+        "metadata": {
+          "name": "jenkins-jnlp"
+        },
+        "spec": {
+          "ports": [
+            {
+              "name": "agent",
+              "protocol": "TCP",
+              "port": 50000,
+              "targetPort": 50000,
+              "nodePort": 0
+            }
+          ],
+          "selector": {
+            "name": "jenkins"
+          },
+          "type": "ClusterIP",
+          "sessionAffinity": "None"
+        }
+      },
+      {
+        "kind": "Route",
+        "apiVersion": "v1",
+        "metadata": {
+          "name": "jenkins-jos"
+        },
+        "spec": {
+          "to": {
+            "kind": "Service",
+            "name": "jenkins",
+            "weight": 100
+          },
+          "port": {
+            "targetPort": "web"
+          }
+        }
+      },
+      {
+        "kind": "ServiceAccount",
+        "apiVersion": "v1",
+        "metadata": {
+          "name": "jenkins",
+          "annotations": {
+            "serviceaccounts.openshift.io/oauth-redirectreference.jenkins": "{\"kind\":\"OAuthRedirectReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"Route\",\"name\":\"jenkins\"}}"
+          }
+        }
+      },
+      {
+        "kind": "RoleBinding",
+        "apiVersion": "v1",
+        "metadata": {
+          "name": "jenkins_edit"
+        },
+        "groupNames": null,
+        "subjects": [
+          {
+            "kind": "ServiceAccount",
+            "name": "jenkins"
+          }
+        ],
+        "roleRef": {
+          "name": "edit"
+        }
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "apiVersion": "v1",
+        "metadata": {
+          "name": "jenkins"
+        },
+        "spec": {
+          "accessModes": [
+            "ReadWriteMany"
+          ],
+          "resources": {
+            "requests": {
+              "storage": "1Gi"
+            }
+          }
+        },
+        "status": {}
+      }
+    ],
+    "parameters": [{
+        "name": "IMAGE_NAMESPACE",
+        "displayName": "Namespace of the image",
+        "description": "Namespace where the image is taken from",
+        "value": "jos"
+    }, {
+        "name": "IMAGE_TAG",
+        "displayName": "Name and tag of image",
+        "description": "Name and tag of the image to use for deployment.",
+        "value": "jenkins-master-kube:2"
+    }]
+  }
